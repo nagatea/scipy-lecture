@@ -14,7 +14,14 @@ def swap(data, i, j):
     d[j] = tmp
 
 #%%
-data = np.loadtxt('dataset.csv', delimiter=",", skiprows=1, usecols=(1,2,3,4,5,6,7,8))
+import pandas as pd
+master_data = pd.read_csv('dataset.csv')
+use_data = master_data.drop("Date", axis=1).drop("Diary", axis=1)
+use_data.head()
+
+
+#%%
+data = np.array(use_data)
 for i in range(len(data[0])):
   data.T[i] = min_max(data.T[i])
 data
@@ -24,6 +31,14 @@ import matplotlib.pyplot as plt
 swap(data, 1, 2)
 for d in data:
   plt.plot(d)
+plt.savefig('figure.png')
 
 #%%
-plt.savefig('figure.png')
+# とりあえず散布図行列を作ってみる
+import seaborn as sns
+import pandas as pd
+
+# kind="reg" でliner regression
+# https://seaborn.pydata.org/generated/seaborn.pairplot.html
+g = sns.pairplot(use_data, kind="reg")
+plt.savefig('pairplot.png')
